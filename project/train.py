@@ -4,49 +4,11 @@ from __future__ import print_function
 from __future__ import division
 import torch
 import torch.nn as nn
-import torch.optim as optim
-import numpy as np
-import torchvision
-from torchvision import datasets, models, transforms
-import matplotlib.pyplot as plt
 import time
-import os
+import copy
 
-from model.my_model import initialize_model
 
-# TODO transforms?
-def get_dataloaders(dataset_name, root, batch_size):
-    if dataset_name = 'mnist':
-        dataset = torchvision.datasets.MNIST(root, train=True)
-        val_dataset = torchvision.datasets.MNIST(root, train=False)
-
-        train_data_loader = torch.utils.data.DataLoader(dataset,
-                                            batch_size=batch_size,
-                                            shuffle=True)
-
-        val_data_loader = torch.utils.data.DataLoader(dataset,
-                                            batch_size=batch_size,
-                                            shuffle=True)
-
-    if dataset_name = "celeba":
-        dataset = torchvision.datasets.CelebA(root, split='train', target_type='attr')
-        val_dataset = torchvision.datasets.MNIST(root, split='valid', target_type='attr')
-
-        train_data_loader = torch.utils.data.DataLoader(dataset,
-                                            batch_size=batch_size,
-                                            shuffle=True)
-
-        val_data_loader = torch.utils.data.DataLoader(dataset,
-                                            batch_size=batch_size,
-                                            shuffle=True)
-
-    else:
-        print("Invalid dataset name, exiting...")
-        exit()
-
-    return [train_data_loader, val_data_loader]
-
-def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
+def train_model(model, dataloaders, criterion, optimizer, device, num_epochs=25):
     """Train a model and save best weights
 
     Args:
@@ -127,22 +89,3 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
     # load best model weights
     model.load_state_dict(best_model_wts)
     return model, val_acc_history
-
-
-# Initialize the model
-model_name = 'resnet'
-num_classes = 10
-feature_extract = False
-model_ft, input_size = initialize_model(model_name, num_classes, feature_extract, use_pretrained=True)
-
-# Print the model we just instantiated
-print(model_ft)
-
-# Data Loaders
-data_loaders = get_dataloaders('mnist', 'project/data', 32)
-
-# Train
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(params_to_update, lr=0.001, momentum=0.9)
-
-train_model(model_ft, data_loaders, criterion, optimizer)
