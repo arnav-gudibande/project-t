@@ -4,95 +4,14 @@ from __future__ import print_function
 from __future__ import division
 import torch
 import torch.nn as nn
+import time
+import torch
+import copy
 import torch.optim as optim
 import numpy as np
-import torchvision
-from torchvision import datasets, models, transforms
-import matplotlib.pyplot as plt
-import time
-import os
-import copy
 
-from model.my_model import initialize_model, SmallModel, eval_suite
-
-# TODO transforms?
-def get_dataloaders(dataset_name, root, batch_size):
-    if dataset_name == 'mnist':
-        dataset = torchvision.datasets.MNIST(root, train=True, download=True, 
-                            transform=torchvision.transforms.Compose([
-                               torchvision.transforms.ToTensor(),
-                               torchvision.transforms.Normalize(
-                                 (0.1307,), (0.3081,))
-                            ]))
-        val_dataset = torchvision.datasets.MNIST(root, train=False, download=True,
-                            transform=torchvision.transforms.Compose([
-                                torchvision.transforms.ToTensor(),
-                                torchvision.transforms.Normalize(
-                                (0.1307,), (0.3081,))
-                            ]))
-
-        print(dataset[0])
-
-        train_data_loader = torch.utils.data.DataLoader(dataset,
-                                            batch_size=batch_size,
-                                            shuffle=True)
-
-        val_data_loader = torch.utils.data.DataLoader(val_dataset,
-                                            batch_size=batch_size,
-                                            shuffle=True)
-        label_names = list(map(str, range(10)))
-
-    elif dataset_name == "celeba":
-        dataset = torchvision.datasets.CelebA(root, split='train', target_type='attr', download=True,
-                                            transform=torchvision.transforms.Compose([
-                                                torchvision.transforms.ToTensor(),
-                                                torchvision.transforms.Normalize(
-                                                (0.0,0.0,0.0), (1.0,1.0,1.0))
-                                            ]))
-        val_dataset = torchvision.datasets.CelebA(root, split='valid', target_type='attr', download=True,
-                                            transform=torchvision.transforms.Compose([
-                                                torchvision.transforms.ToTensor(),
-                                                torchvision.transforms.Normalize(
-                                                (0.0,0.0,0.0), (1.0,1.0,1.0))
-                                            ]))
-
-        train_data_loader = torch.utils.data.DataLoader(dataset,
-                                            batch_size=batch_size,
-                                            shuffle=True)
-
-        val_data_loader = torch.utils.data.DataLoader(val_dataset,
-                                            batch_size=batch_size,
-                                            shuffle=True)
-        label_names = []
-
-    elif dataset_name == "cifar10":
-        dataset = torchvision.datasets.CIFAR10(root, train=True, download=True,
-                                            transform=torchvision.transforms.Compose([
-                                                torchvision.transforms.ToTensor(),
-                                                torchvision.transforms.Normalize(
-                                                (0.0,0.0,0.0), (1.0,1.0,1.0))
-                                            ]))
-        val_dataset = torchvision.datasets.CIFAR10(root, train=False, download=True,
-                                            transform=torchvision.transforms.Compose([
-                                                torchvision.transforms.ToTensor(),
-                                                torchvision.transforms.Normalize(
-                                                (0.0,0.0,0.0), (1.0,1.0,1.0))
-                                            ]))
-
-        train_data_loader = torch.utils.data.DataLoader(dataset,
-                                            batch_size=batch_size,
-                                            shuffle=True)
-
-        val_data_loader = torch.utils.data.DataLoader(val_dataset,
-                                            batch_size=batch_size,
-                                            shuffle=True)
-        label_names = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-
-    else:
-        print("Invalid dataset name, exiting...")
-        exit()
-
-    return {'train': train_data_loader, 'val': val_data_loader, 'label_names': label_names}
+from models import initialize_model, SmallModel, eval_suite
+from data import get_dataloader, load_dataset
 
 
 def train_model(model, num_classes, dataloaders, criterion, optimizer, num_epochs=25):
@@ -203,9 +122,10 @@ if __name__ == '__main__':
     print(model_ft)
 
     # Data Loaders
-    data_loaders = get_dataloaders('cifar10', 'project/data', 32)
+    tr_data, val_data, labels = load_dataset('cifar10')
+    dataloaders = get_dataloader(tr_data, val_data, labels, batch_size=32)
     # Train
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model_ft.parameters(), lr=0.001, momentum=0.9)
 
-    train_model(model_ft, num_classes, data_loaders, criterion, optimizer)
+    train_model(model_ft, num_classes, dataloaders, criterion, optimizer)
