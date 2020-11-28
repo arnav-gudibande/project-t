@@ -2,27 +2,26 @@
 
 from __future__ import print_function
 from __future__ import division
-import torch
 import torch.nn as nn
-import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
-import torchvision
-from torchvision import datasets, models, transforms
-import matplotlib.pyplot as plt
-import time
-import os
+from torchvision import models
+import torch
+from cifar10_module import get_classifier
 
-#assume max pool with filter width 2 and stride 2
+
+# assume max pool with filter width 2 and stride 2
 def get_width(input_width, kernel_size, pool):
     conv_width = (input_width - (kernel_size - 1))
     if pool:
         conv_width = conv_width // 2
     return conv_width
 
+
 def compute_accuracy(predictions, y):
     assert len(predictions) == len(y), 'predictions dim does not match y dim'
     return np.mean(predictions == y)
+
 
 def confusion_matrix(predictions, y, num_classes):
     assert len(predictions) == len(y), 'predictions dim does not match y dim'
@@ -30,6 +29,7 @@ def confusion_matrix(predictions, y, num_classes):
     for i in range(len(y)):
         conf_mat[y[i], predictions[i]] += 1
     return conf_mat
+
 
 def fp_fn(conf_mat, idx):
     FPs = np.sum(conf_mat[:, idx]) - conf_mat[idx, idx]
@@ -41,6 +41,7 @@ def fp_fn(conf_mat, idx):
     precision = TPs / (TPs + FPs)
     recall = TPs / (TPs + FNs)
     return {'FPR': FPR, 'TPR': TPR, 'precision': precision, 'recall': recall}
+
 
 def eval_suite(predictions, y, label_names):
     conf_mat = confusion_matrix(predictions, y, len(label_names))
@@ -86,9 +87,6 @@ class SmallModel(nn.Module):
         return self.fc2(x)
 
 
-
-
-
 def set_parameter_requires_grad(model, feature_extracting):
     """Sets all layers to frozen or un-frozen
 
@@ -100,7 +98,8 @@ def set_parameter_requires_grad(model, feature_extracting):
         for param in model.parameters():
             param.requires_grad = False
 
-#TODO currently input size has to be 224, may need to change this
+
+# TODO: currently input size has to be 224, may need to change this
 def initialize_model(model_name, num_classes, feature_extract, use_pretrained=True):
     """Initialize Pretrained Model
 
@@ -167,3 +166,19 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained=Tr
 
     return model_ft, input_size
 
+def initialize_model_cifar(feature_extract, use_pretrained=True):
+    """Initialize Pretrained resnet18 Model
+
+    Args:
+        feature_extract (bool): If True, all layers except last are frozen
+        use_pretrained (bool, optional): Uses pretrained model if True. Defaults to True.
+
+    Returns:
+        nn.Module
+    """
+    model_ft = get_classifier('resnet18', pretrained=True)
+    set_parameter_requires_grad(model_ft, feature_extract)
+    num_ftrs = model_ft.fc.in_features
+    model_ft.fc = nn.Linear(num_ftrs, 10)
+
+    return model_ft
