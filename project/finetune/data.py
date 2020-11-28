@@ -1,6 +1,5 @@
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
-from cifar10_module import get_classifier
 
 
 def preprocess(dataset_name):

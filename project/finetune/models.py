@@ -176,9 +176,10 @@ def initialize_model_cifar(feature_extract, use_pretrained=True):
     Returns:
         nn.Module
     """
-    model_ft = get_classifier('resnet18', pretrained=True)
+    model_ft = get_classifier('resnet18', pretrained=use_pretrained)
     set_parameter_requires_grad(model_ft, feature_extract)
     num_ftrs = model_ft.fc.in_features
     model_ft.fc = nn.Linear(num_ftrs, 10)
 
     return model_ft
+
