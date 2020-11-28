@@ -2,7 +2,6 @@
 
 from __future__ import print_function
 from __future__ import division
-import torch
 import torch.nn as nn
 import time
 import torch
@@ -10,7 +9,7 @@ import copy
 import torch.optim as optim
 import numpy as np
 
-from models import initialize_model, SmallModel, eval_suite
+from models import SmallModel, eval_suite
 from data import get_dataloader, load_dataset
 
 
@@ -107,6 +106,7 @@ def train_model(model, num_classes, dataloaders, criterion, optimizer, num_epoch
     # load best model weights
     model.load_state_dict(best_model_wts)
     return model, val_acc_history
+
 
 if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

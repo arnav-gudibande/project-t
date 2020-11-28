@@ -8,6 +8,7 @@ import numpy as np
 from torchvision import models
 import torch
 
+
 # assume max pool with filter width 2 and stride 2
 def get_width(input_width, kernel_size, pool):
     conv_width = (input_width - (kernel_size - 1))
