@@ -69,15 +69,13 @@ def get_dataloaders(dataset_name, root, batch_size):
         dataset = torchvision.datasets.CIFAR10(root, train=True, download=True,
                                             transform=torchvision.transforms.Compose([
                                                 torchvision.transforms.ToTensor(),
-                                                torchvision.transforms.Normalize(
-                                                (0.0,0.0,0.0), (1.0,1.0,1.0))
-                                            ]))
+                                                transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                                                    std=[0.229, 0.224, 0.225])]))
         val_dataset = torchvision.datasets.CIFAR10(root, train=False, download=True,
                                             transform=torchvision.transforms.Compose([
                                                 torchvision.transforms.ToTensor(),
-                                                torchvision.transforms.Normalize(
-                                                (0.0,0.0,0.0), (1.0,1.0,1.0))
-                                            ]))
+                                                transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                                                    std=[0.229, 0.224, 0.225])]))
 
         train_data_loader = torch.utils.data.DataLoader(dataset,
                                             batch_size=batch_size,
