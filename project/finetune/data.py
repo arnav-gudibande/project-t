@@ -9,8 +9,8 @@ def preprocess(dataset_name):
             transforms.Normalize((0.1307,), (0.3081,))
         ])
     elif dataset_name == 'celeba' or dataset_name == 'cifar10':
-        img_preprocess = torchvision.transforms.Compose([
-                torchvision.transforms.ToTensor(),
+        img_preprocess = transforms.Compose([
+                transforms.ToTensor(),
                 transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                     std=[0.229, 0.224, 0.225])
             ])
