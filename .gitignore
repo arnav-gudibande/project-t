@@ -142,3 +142,6 @@ cython_debug/
 
 # Dataset files
 project/data/
+
+project/finetune/cifar10_models/state_dicts/
+*.zip
