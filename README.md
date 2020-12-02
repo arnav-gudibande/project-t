@@ -22,6 +22,7 @@ Run Jupyter Notebook
 * ```project/problem1-3.ipynb``` - 3 Jupyter notebooks intended to be completed by students
 * ```project/finetune/cifar10_models``` - Source code for CIFAR-10 pre-trained models (source: https://github.com/huyvnphan/PyTorch_CIFAR10)
 * ```docs/``` - Contains lecture slides, notes, and quiz
+* ```project/data_ft``` - Contains cached activations for notebook 1
 
 ### Learning Objectives
 * ```problem1.ipynb``` - In this notebook, students will discover just how powerful the learned features from pretrained models really are. 
