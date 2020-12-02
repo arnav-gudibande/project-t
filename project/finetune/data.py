@@ -1,5 +1,4 @@
 from torchvision import datasets, transforms
-from torch.utils.data import DataLoader
 
 
 def preprocess(dataset_name):
@@ -49,16 +48,3 @@ def load_dataset(dataset_name, root='data'):
         return
 
     return train_dataset, val_dataset, label_names
-
-
-def get_dataloader(train_dataset, val_dataset, label_names, batch_size):
-    train_data_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    val_data_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=True)
-
-    data = {
-        'train': train_data_loader,
-        'val': val_data_loader,
-        'label_names': label_names
-    }
-
-    return data
