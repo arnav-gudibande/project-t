@@ -6,7 +6,11 @@ Project Members: Charlie Snell, Arnav Gudibande, Divi Schmidt
 
 ### Installation
 
-Install and activate [virtual environment](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
+You can choose to run this locally or on an instance with a GPU (not required). Once you have an environment setup, download the codebase
+* ```git clone https://github.com/arnav-gudibande/project-t.git```
+* ```cd project-t```
+
+Install and activate a [virtual environment](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
 * ```python3 -m pip install --user virtualenv```
 * ```python3 -m venv env```
 * ```source env/bin/activate```
@@ -19,9 +23,14 @@ Run Jupyter Notebook
 * ```jupyter notebook project```
 
 ### Navigating Repository
+#### For Students
 * ```project/problem1-3.ipynb``` - 3 Jupyter notebooks intended to be completed by students
-* ```project/finetune/cifar10_models``` - Source code for CIFAR-10 pre-trained models (source: https://github.com/huyvnphan/PyTorch_CIFAR10)
 * ```docs/``` - Contains lecture slides, notes, and quiz
+
+#### For Staff / Maintainers
+* ```project/sol1-3.ipynb``` - Detailed solution notebooks corresponding to above
+* ```project/finetune/cifar10_models``` - Source code for CIFAR-10 pre-trained models (credit: https://github.com/huyvnphan/PyTorch_CIFAR10)
+* ```project/data_ft``` - Contains cached activations for notebook 1
 
 ### Learning Objectives
 * ```problem1.ipynb``` - In this notebook, students will discover just how powerful the learned features from pretrained models really are. 
